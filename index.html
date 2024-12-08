@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood-Based Music Explorer</title>
+    <style>
+        @import url('https://fonts.cdnjs.com/css2?family=SF+Pro+Display:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(145deg, #000000, #1a1a1a);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        select#moodSelector {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+            appearance: none;
+            padding-right: 40px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+
+        select#moodSelector:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        #showPlaylist {
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        #showPlaylist:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #timerSelector {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+            appearance: none;
+            padding-right: 40px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+
+        .clip-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .clip-box p {
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .timer-display {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            color: #ff6b6b;
+        }
+
+        iframe {
+            width: 100%;
+            height: 166px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            select#moodSelector,
+            #showPlaylist,
+            #timerSelector {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mood-Based Music Explorer</h1>
+        <div class="controls">
+            <select id="moodSelector">
+                <option value="happy">Happy</option>
+                <option value="sad">Sad</option>
+                <option value="relaxed">Relaxed</option>
+                <option value="energetic">Energetic</option>
+                <option value="study">Study</option>
+                <option value="meditation">Meditation</option>
+                <option value="sleep">Sleep</option>
+            </select>
+            <select id="timerSelector">
+                <option value="0">No Timer</option>
+                <option value="15">15 Minutes</option>
+                <option value="30">30 Minutes</option>
+                <option value="60">1 Hour</option>
+            </select>
+            <button id="showPlaylist">Show Playlist</button>
+        </div>
+        <div id="timerDisplay" class="timer-display"></div>
+        <div id="clipContainer" class="clip-box">
+            <p>Select a mood to explore music!</p>
+        </div>
+        <div id="timerDisplay" class="timer-display"></div>
+    </div>
+    <script>
+        const API_KEY = 'AIzaSyAgH3o3YRvGVGyFnsM161FKCLzTOyqpzEw';
+        const showPlaylistButton = document.getElementById('showPlaylist');
+        const moodSelector = document.getElementById('moodSelector');
+        const timerSelector = document.getElementById('timerSelector');
+        const clipContainer = document.getElementById('clipContainer');
+        const timerDisplay = document.getElementById('timerDisplay');
+
+        const moodQueries = {
+            happy: 'Best upbeat English pop songs',
+            sad: 'Top emotional English ballads',
+            relaxed: 'Chill English acoustic coffeehouse music',
+            energetic: 'Top high energy English workout hits',
+            study: 'English focus music for studying',
+            meditation: 'Relaxing English meditation tracks',
+            sleep: 'Calm English sleep music'
+        };
+
+        let timer;
+        let countdown;
+
+        const chime = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Chime sound
+
+        showPlaylistButton.addEventListener('click', () => {
+            const mood = moodSelector.value;
+            const timerValue = parseInt(timerSelector.value);
+            fetchYouTubePlaylist(mood);
+
+            if (timer) {
+                clearTimeout(timer);
+                clearInterval(countdown);
+            }
+
+            if (timerValue > 0) {
+                let remainingTime = timerValue * 60; // Convert to seconds
+
+                countdown = setInterval(() => {
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    timerDisplay.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                    if (remainingTime <= 0) {
+                        clearInterval(countdown);
+                    }
+
+                    remainingTime--;
+                }, 1000);
+
+                timer = setTimeout(() => {
+                    chime.play();
+                    timerDisplay.textContent = '';
+                    chime.play();
+                    alert(`Time's up! Why not explore a new mood or take a break?`);
+                }, timerValue * 60 * 1000);
+            } else {
+                timerDisplay.textContent = '';
+            }
+        });
+
+        function fetchYouTubePlaylist(mood) {
+            const query = moodQueries[mood];
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${encodeURIComponent(query)}&type=video&videoDuration=long&key=${API_KEY}`;
+
+            console.log('Fetching URL:', url);
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('API Response:', data);
+                    const videos = data.items.filter(item => item.id.kind === 'youtube#video');
+                    if (videos.length > 0) {
+                        const playlistHTML = videos.map(video => `
+                            <iframe 
+                                src="https://www.youtube.com/embed/${video.id.videoId}" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        `).join('');
+                        clipContainer.innerHTML = playlistHTML;
+                    } else {
+                        clipContainer.innerHTML = '<p>No videos found for this mood. Try again!</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching YouTube playlist:', error);
+                    clipContainer.innerHTML = '<p>Oops! Something went wrong while fetching the playlist. Please try again later.</p>';
+                });
+        }
+    </script>
+</body>
+</html>
+
+
